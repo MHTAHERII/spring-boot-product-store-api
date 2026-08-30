@@ -30,10 +30,7 @@ public class HelloController {
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
     }
-//    @GetMapping("/token")
-//    public String token(){
-//        return jwtService.generateToken("user");
-//    }
+
     @PostMapping("/token")
     public String token (@RequestBody LoginRequest request) {
         authenticationManager.authenticate(
@@ -56,11 +53,6 @@ public class HelloController {
     @GetMapping("/products")
     public List<Product> getProducts() {
         return service.getProducts();
-//        return List.of(
-//                new Product(1, "Laptop", 50000,"electronic"),
-//                new Product(2, "Phone", 30000,"electronic"),
-//                new Product(3, "Mouse", 1000,"electronic")
-//        );
     }
     @PostMapping("/products")
     public String addProduct( @Valid @RequestBody Product product){
