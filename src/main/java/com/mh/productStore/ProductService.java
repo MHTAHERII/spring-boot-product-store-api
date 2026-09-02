@@ -1,5 +1,6 @@
 package com.mh.productStore;
 
+import com.mh.productStore.exception.ProductNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -19,7 +20,7 @@ public class ProductService {
         repository.save(product);
     }
     public Product getProduct(int id){
-        return repository.findById(id).orElse(null);
+        return repository.findById(id).orElseThrow(()->new ProductNotFoundException("product not found with id:"+id));
     }
     public void updateProduct(Product product){
         repository.save(product);
