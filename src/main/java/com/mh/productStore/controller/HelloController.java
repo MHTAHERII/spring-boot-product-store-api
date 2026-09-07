@@ -4,9 +4,11 @@ import com.mh.productStore.Product;
 import com.mh.productStore.ProductService;
 import com.mh.productStore.dto.LoginRequest;
 import com.mh.productStore.security.JwtService;
+import com.mh.productStore.user.AppUser;
 import com.mh.productStore.user.RegisterRequest;
 import com.mh.productStore.user.UserService;
 import jakarta.validation.Valid;
+import org.apache.catalina.User;
 import org.springframework.data.domain.Page;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -126,14 +128,23 @@ public class HelloController {
         );
         return jwtService.generateToken(request.getUsername());
     }
-    @GetMapping("/encode")
-    public String encode(){
-        return passwordEncoder.encode("1234");
+    @PostMapping("/encode/{password}")
+    public String encode(@PathVariable String password){
+        return passwordEncoder.encode(password);
     }
     @PostMapping("/register")
     public String register(@Valid @RequestBody RegisterRequest registerRequest){
         userService.register(registerRequest);
         return "User registered successfully";
+    }
+    @GetMapping("/users")
+    public List<AppUser> getUsers(){
+        return userService.getAllUser();
+    }
+    @PostMapping("/users/{username}")
+    public String deleteUser(@PathVariable String username){
+        userService.deleteUser(username);
+        return "User deleted successfully";
     }
 
 

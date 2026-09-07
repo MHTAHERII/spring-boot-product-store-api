@@ -10,8 +10,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-
+import java.util.List;
 
 
 @Service
@@ -43,6 +44,15 @@ public class UserService implements UserDetailsService {
         user.setRole("USER");
         repository.save(user);
         log.info("User {} registered successfully", user.getUsername());
+    }
+
+    public List<AppUser> getAllUser(){
+      return repository.findAll();
+    }
+
+    @Transactional
+    public void deleteUser(String username){
+        repository.deleteByUsername(username);
     }
 
 

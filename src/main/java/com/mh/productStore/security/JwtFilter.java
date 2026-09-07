@@ -13,7 +13,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 @Component
-public class JwtFilter extends OncePerRequestFilter {
+public class JwtFilter extends OncePerRequestFilter //وظیفه دارد برای هر درخواست ورودی توکن را استخراج اعتبارسنجی و هویت کاربر را در سیستم ثبت کند
+{
     private final JwtService jwtService;
     private final UserService userService;
 
@@ -26,23 +27,24 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         System.out.println("JWT FILTER RUNNING for: " + request.getRequestURI());
-        String authHeader = request.getHeader("Authorization");
+        //بررسی هدر Authorization
+        String authHeader = request.getHeader("Authorization");//بررسی میکند هدر مجوز دارد یا نه
         //اگر هدر وجود نداشت یا Bearer نبود، بدون پردازش JWT ادامه بده
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             System.out.println("No valid Authorization header found, skipping JWT filter");
             filterChain.doFilter(request, response);
             return;
         }
-        String token = authHeader.substring(7);
+        String token = authHeader.substring(7);//استخراج توکن
         System.out.println("[JWT] Token extracted (first 20): " + token.substring(0, Math.min(20, token.length())) + "...");
 
-        String username = jwtService.extractUsername(token);
+        String username = jwtService.extractUsername(token);//خواندن نام کاربری
         System.out.println("[JWT] Username from token: " + username);
 
-        var userDetails = userService.loadUserByUsername(username);
+        var userDetails = userService.loadUserByUsername(username);//دریافت کاربر
         System.out.println("[JWT] User loaded - authorities: " + userDetails.getAuthorities());
 
-        boolean isValid = jwtService.validateToken(token, userDetails.getUsername());
+        boolean isValid = jwtService.validateToken(token, userDetails.getUsername());//اعتبارسنجی توکن
         System.out.println("[JWT] Token valid: " + isValid);
 
         if (isValid) {
@@ -51,7 +53,7 @@ public class JwtFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authToken);
             System.out.println("[JWT] SecurityContextHolder set OK!");
         }
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(request, response);//درخواست و پاسخ به فیلتر بعدی در زنجیره پاس داده میشود
 
     }
 

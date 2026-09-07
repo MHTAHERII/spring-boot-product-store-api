@@ -8,7 +8,8 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 
 @Service
-public class JwtService {
+public class JwtService//سرویس اصلی مدیریت توکن های jwt
+{
     private final SecretKey key = Keys.hmacShaKeyFor("mysecretkeymysecretkeymysecretkey123".getBytes());//کلید مخفی سرور
 
     public String generateToken(String username) {
