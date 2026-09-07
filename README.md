@@ -116,11 +116,12 @@ Spring Boot Actuator provides production-ready monitoring endpoints:
 
 ## 📚 API Endpoints Overview
 
-### 🔑 Authentication
+### 🔑 Authentication & Users
 | Method | Endpoint | Description | Access |
 | :--- | :--- | :--- | :--- |
 | `POST` | `/register` | Register a new user | Public |
 | `POST` | `/token` / `/login` | Authenticate & receive JWT token | Public |
+| `GET` | `/users` | List all users (Admin only) | `ADMIN` |
 
 ### 📦 Products (CRUD)
 | Method | Endpoint | Description | Access |
